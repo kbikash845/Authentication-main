@@ -8,6 +8,9 @@ const MainNavigation = () => {
 const authctx= useContext(AuthContext);
 
 const isLonggedIn=authctx.isLonggedIn
+const longoutHandler=()=>{
+  authctx.longout()
+}
 
   return (
     <header className={classes.header}>
@@ -24,7 +27,7 @@ const isLonggedIn=authctx.isLonggedIn
           </li>)}
           
           {isLonggedIn && (<li>
-            <button>Logout</button>
+            <button onClick={longoutHandler}>Logout</button>
           </li>)}
         </ul>
       </nav>

@@ -4,7 +4,7 @@ const AuthContext=React.createContext({
     token:'',
     isLonggedIn:false,
     login:(token)=>{},
-    lonout:()=>{}
+    longout:()=>{}
 
 })
 
