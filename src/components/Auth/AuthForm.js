@@ -1,13 +1,20 @@
-import { useState,useRef} from 'react';
-
+import { useState,useRef, useContext} from 'react';
+// import { useHistory } from 'react-router';
+import { useNavigate } from "react-router-dom";
 import classes from './AuthForm.module.css';
-// import { json } from 'react-router-dom';
+import AuthContext from '../../Store/auth-Context';
+
 
 const AuthForm = () => {
+  // const history=useHistory();
+  const navigate = useNavigate();
   const EmailInputRef=useRef()
   const PasswordRef=useRef()
   const [isLogin, setIsLogin] = useState(true);
   const [isLoadindg,setLoading]=useState(false)
+
+
+  const authctx=useContext(AuthContext);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -26,9 +33,8 @@ const AuthForm = () => {
     url='https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBQMtQ6DA9lUfmFoZc9T2YMwBI6vx_790Q'
  
    }
-   fetch(
-    url,
-   {
+   fetch(url,
+     {
      method:"POST",
      body:JSON.stringify({
        email:enterEmail,
@@ -37,25 +43,30 @@ const AuthForm = () => {
      }),
      headers:{
       'Content-Type': 'application/json'
-     }
+     },
    }
-   ).then(res=>{
+   ).then((res)=>{
      setLoading(false)
      if(res.ok){
       return res.json()
-     }else{
-       return res.json().then((data=>{
+      }else{
+       return res.json().then((data)=>{
          let errormassage="Authentication failed";
         // if(data && data.error && data.error.message){
         //  errormassage=data.error.message
         // }
          
           throw new Error(errormassage)
-       }))
+       });
 
      }
    }).then((data)=>{
-    console.log(data)
+    // console.log(data)
+    authctx.login(data.idToken)
+    // history.push('/')
+    navigate("/");
+
+    console.log(authctx.login(data.idToken));
    }).catch((err)=>{
     alert(err.message)
    })
